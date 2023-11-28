@@ -11044,3 +11044,22 @@ html {
 .copyright {
   background-color: #1a252f;
 }
+
+.new-bg-primary{
+  background-color:#433d3d
+}
+.new-bg-secundary{
+  background-color:#e33c08
+}
+
+.new-bg-sobrenos{
+  background-color: #f77014
+}
+
+.new-bg-footer-primary{
+  background-color: #b7aea5
+}
+
+.new-bg-footer-secundary{
+  background-color: #221d21
+}
