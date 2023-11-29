@@ -43,16 +43,15 @@
                                         <p class="mb-4">Informe seus dados no formulário abaixo.</p>
                                         
                                     </div>
-                                    <form class="user">
-                                        
+                                    <form class="user" action="/login" method="POST">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Informe seu e-mail">
+                                                name="email" placeholder="Informe seu e-mail">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Informe sua senha">
+                                                name="password" placeholder="Informe sua senha">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -64,9 +63,7 @@
 
                                         <%- include('../includes/messageLogin'); %>
                                         
-                                        <a href="/admin" class="btn new-btn-primary btn-user btn-block">
-                                            Entrar
-                                        </a>
+                                        <button type="submit" class="btn new-btn-primary btn-user btn-block">Entrar</button>
 
                                     </form>
                                     <hr>

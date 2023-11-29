@@ -12,8 +12,9 @@ route.get('/', landingPageController.landingPage);
 route.get('/login', loginController.login);
 route.get('/login/register', loginController.registrationForm);
 route.get('/login/recover', loginController.recover);
+route.get('/logout', loginController.logout);
 route.post('/login/register', loginController.register);
-route.post('/login/access', loginController.access);
+route.post('/login', loginController.access);
 
 //Admin
 route.get('/admin', adminController.admin);
