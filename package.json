@@ -1,10 +1,10 @@
 {
-  "name": "agenda",
+  "name": "cdexpress",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "",
     "start": "nodemon server.js --ignore public --ignore frontend",
     "dev": "webpack -w"
   },
@@ -24,8 +24,11 @@
     "express-session": "^1.17.3",
     "helmet": "^7.1.0",
     "moongose": "^1.0.0",
+    "mysql2": "^3.6.5",
     "regenerator-runtime": "^0.14.0",
+    "sequelize": "^6.35.2",
     "style-loader": "^3.3.3",
+    "sucrase": "^3.34.0",
     "validator": "^13.11.0"
   },
   "devDependencies": {
@@ -34,7 +37,11 @@
     "@babel/preset-env": "^7.23.3",
     "babel-loader": "^9.1.3",
     "nodemon": "^3.0.1",
+    "sequelize-cli": "^6.6.2",
     "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0"
   }
 }

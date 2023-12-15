@@ -1,9 +1,16 @@
 const express = require('express');
 const route = express.Router();
+const path = require('path');
+
+//Controllers
 const loginController = require('./src/controllers/loginController');
 const landingPageController = require('./src/controllers/landingPageController');
 const adminController = require('./src/controllers/adminController');
-const path = require('path');
+
+//Middlewares
+const { loginRequired } = require('./src/middlewares/middleware');
+
+
 
 //Landing-page
 route.get('/', landingPageController.landingPage);
@@ -17,7 +24,7 @@ route.post('/login/register', loginController.register);
 route.post('/login', loginController.access);
 
 //Admin
-route.get('/admin', adminController.admin);
+route.get('/admin', loginRequired, adminController.admin);
 
 //404 - Admin
 //route.get('/admin/*', function(req, res){
