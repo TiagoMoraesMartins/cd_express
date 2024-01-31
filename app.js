@@ -7,6 +7,7 @@ import express from 'express';
 import landingPageRoutes from './src/routes/landingPageRoutes';
 import adminRoutes from './src/routes/adminRoutes';
 import loginRoutes from './src/routes/loginRoutes';
+import usuarioRoutes from './src/routes/usuarioRoutes';
 import path from 'path';
 import flash from 'connect-flash';
 import csrf from 'csurf';
@@ -52,6 +53,7 @@ class App {
     this.app.use('/', landingPageRoutes);
     this.app.use('/login', loginRoutes);
     this.app.use('/admin', adminRoutes);
+    this.app.use('/admin/usuario', usuarioRoutes);
   }
 
 }

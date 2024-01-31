@@ -26,6 +26,10 @@ export default class Usuario extends Model {
           },
         },
       },
+      tipo_acesso:{
+        type: Sequelize.STRING,
+        defaultValue: '',
+      },
       password_hash: {
         type: Sequelize.STRING,
         defaultValue: '',
@@ -42,6 +46,7 @@ export default class Usuario extends Model {
       },
     }, {
       sequelize,
+      modelName: 'Usuario',
     });
 
     this.addHook('beforeSave', async user =>{
@@ -51,6 +56,9 @@ export default class Usuario extends Model {
     })
     return this;
   }
+  static associate(models) {
+    this.belongsTo(models.Empresa, {foreignKey: 'empresaId'});
+}
 
   passwordIsValid(password){
     return bcryptjs.compare(password, this.password_hash);
