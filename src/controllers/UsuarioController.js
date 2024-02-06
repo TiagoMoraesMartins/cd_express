@@ -1,30 +1,41 @@
-import Usuario from '../models/Usuario';
+import Usuario from '../models/UsuarioModel';
 
 class UsuarioController{
+
   async index(req, res){
+
     try {
 
       const usuarios = await Usuario.findAll();
       if(usuarios.length <= 0){
         return res.status(400).json({
           errors: ['Nenhum registro encontrado']
-        })
+        });
       }
 
-      return res.json(usuarios);
+      return res.status(200).json(usuarios);
+
     } catch (e) {
+
+        if(!e.errors){
+          return res.status(500).json({ errors: e });
+        }
+        else{
         return res.status(400).json({
-          errors: e.errors.map((err) => err.message )});
+          errors: e.errors.map((err) => err.message )
+        });
+      }
     }
   }
 
   async show(req, res){
+    console.log('show');
     try {
 
       const { id } = req.params;
       if(!id){
         return res.status(400).json({
-          error: ['Parametro id não foi localizado']
+          errors: ['Argumento id não foi localizado']
         });
       }
 
@@ -35,20 +46,30 @@ class UsuarioController{
         });
       }
 
-      return res.json(usuario);
+      return res.status(200).json(usuario);
+
   } catch (e) {
-    return res.status(400).json({
-      errors: e.errors.map((err)=> err.message )
-    });
+
+
+    if(!e.errors){
+      return res.status(500).json({errors: e });
+    }
+    else {
+      return res.status(400).json({
+        errors: e.errors.map((err)=> err.message )
+        });
+      }
     }
   }
 
   async update(req, res){
+
     try {
+
       const { id } = req.params;
       if(!id){
         return res.status(400).json({
-          error: ['Parametro id não foi localizado']
+          error: ['Argumento id não foi localizado']
         });
       }
 
@@ -59,18 +80,32 @@ class UsuarioController{
         });
       }
 
-      const usuarioAtualizado = usuario.update(req.body);
+      if(!req.body){
+        return res.status(400).json({
+          errors: ['Objeto usuário náo localizado']
+        });
+      }
+
+      const usuarioAtualizado = await usuario.update(req.body);
       return res.json(usuarioAtualizado);
 
     } catch (e) {
-      return res.status(400).json({
-        errors: e.errors.map((err) => err.message )
-      });
-    }
+
+      if(!e.errors){
+        return res.status(500).json({errors: e });
+      }
+      else{
+        return res.status(400).json({
+          errors: e.errors.map((err) => err.message )
+          });
+        }
+      }
   }
 
   async delete(req, res){
+
     try {
+
       const { id } = req.params;
       if(!id){
         return res.status(400).json({
@@ -86,34 +121,49 @@ class UsuarioController{
       }
 
       await usuario.destroy();
-      return res.json({
+      return res.status(200).json({
         usuario_apagado: true,
       });
 
     } catch (e) {
-      return res.status(400).json({
-        errors: e.errors.map((err) => err.message )
-      });
+
+      if(!e.errors){
+        return res.status(500).json({errors: e});
+      }
+      else{
+        return res.status(400).json({
+          errors: e.errors.map((err) => err.message )
+        });
+      }
     }
   }
 
   async store(req, res){
+
     try {
+
       if(!req.body){
-        return res.status(404).json({
-          error: ['Objeto usuario inválido']
+        return res.status(400).json({
+          errors: ['Objeto usuario inválido']
         });
       }
 
-      const usuario = Usuario.create(req.body);
-      return res.json({
+      const usuario = await Usuario.create(req.body);
+      return res.status(200).json({
         usuario_cadastrado: true,
         usuario
       });
+
     } catch (e) {
-      return res.status(400).json({
-        errors: e.errors.map((err)=> err.message )
-      });
+
+      if(!e.errors){
+        return res.status(500).json({errors: e });
+      }
+      else {
+        return res.status(400).json({
+          errors: e.errors.map((err) => err.message )
+        });
+      }
     }
   }
 }

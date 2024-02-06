@@ -82,6 +82,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      ativo: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

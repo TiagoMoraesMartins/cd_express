@@ -13,7 +13,7 @@ exports.middlewareGlobal = (req, res, next) => {
   exports.checkCsrfError = (err, req, res, next) => {
     if(err) {
       console.log(err);
-      return res.send('Token CSRF');
+      return res.send('checkCsrfError');
     }
 
     next();

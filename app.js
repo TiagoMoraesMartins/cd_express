@@ -8,6 +8,8 @@ import landingPageRoutes from './src/routes/landingPageRoutes';
 import adminRoutes from './src/routes/adminRoutes';
 import loginRoutes from './src/routes/loginRoutes';
 import usuarioRoutes from './src/routes/usuarioRoutes';
+import empresaRoutes from './src/routes/empresaRoutes';
+import tokenRoutes from './src/routes/tokenRoutes';
 import path from 'path';
 import flash from 'connect-flash';
 import csrf from 'csurf';
@@ -37,15 +39,22 @@ class App {
       secret:"secret_secret_secret",
       cookie: { secure: false, maxAge: 14400000 },
     }));
-    this.app.use(csrf());
+    //TODO: Tratamento para ativar ou não o csrf - VERIFICAR SE É A MELHOR FORMA
+    /*this.app.use('/tokens', (req, res, next) =>{
+      return next();
+      this.app.use(csrf());
+    })*/
+    //TODO: Desativei o csrf pois qualquer método de POST estava solicitando...
+    //TODO:... a ideia é validar somente os formulários
+    //this.app.use(csrf());
   }
 
   middlewares() {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(middlewareGlobal);
-    this.app.use(checkCsrfError);
-    this.app.use(csrfMiddleware);
+    //this.app.use(checkCsrfError);
+    //this.app.use(csrfMiddleware);
   }
 
   routes() {
@@ -54,6 +63,8 @@ class App {
     this.app.use('/login', loginRoutes);
     this.app.use('/admin', adminRoutes);
     this.app.use('/admin/usuario', usuarioRoutes);
+    this.app.use('/admin/empresa', empresaRoutes);
+    this.app.use('/tokens/', tokenRoutes);
   }
 
 }

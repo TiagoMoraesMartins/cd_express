@@ -1,5 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 import bcryptjs from 'bcryptjs';
+import Usuario from './UsuarioModel';
 
 export default class Empresa extends Model {
   static init(sequelize) {
@@ -24,7 +25,7 @@ export default class Empresa extends Model {
           },
         },
       },
-      cnpf: {
+      cnpj: {
         type: Sequelize.STRING,
         defaultValue: '',
         validade: {
@@ -110,5 +111,8 @@ export default class Empresa extends Model {
     });
 
     return this;
+  }
+  static associate(models) {
+    this.hasMany(models.Usuario);
   }
 }

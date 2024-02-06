@@ -4,6 +4,11 @@ import bcryptjs from 'bcryptjs';
 export default class Usuario extends Model {
   static init(sequelize) {
     super.init({
+      empresaId: {
+        type: Sequelize.BIGINT,
+        foreignKey: true,
+        defaultValue: Sequelize.BIGINT,
+      },
       nome: {
         type: Sequelize.STRING,
         defaultValue: '',
@@ -26,7 +31,7 @@ export default class Usuario extends Model {
           },
         },
       },
-      tipo_acesso:{
+      tipo_de_acesso:{
         type: Sequelize.STRING,
         defaultValue: '',
       },
@@ -57,7 +62,7 @@ export default class Usuario extends Model {
     return this;
   }
   static associate(models) {
-    this.belongsTo(models.Empresa, {foreignKey: 'empresaId'});
+    this.belongsTo(models.Empresa);
 }
 
   passwordIsValid(password){
