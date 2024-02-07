@@ -1,14 +1,9 @@
 import Empresa from '../models/EmpresaModel';
 
 class EmpresaController{
-  constructor(){
-    const errors = [ ];
-    const empresa = { };
-  }
   async index(req, res){
-
     try {
-
+      //const empresas = await Empresa.findAll({where:{ativo:true}});
       const empresas = await Empresa.findAll();
       if(empresas.length <= 0){
         return res.status(400).json({
@@ -19,7 +14,6 @@ class EmpresaController{
       return res.status(200).json(empresas);
 
     } catch (e) {
-
       if(!e.errors){
         return res.status(500).json({ errors: e })
       }
@@ -32,16 +26,8 @@ class EmpresaController{
   }
 
   async show(req, res){
-
     try {
-
       const { id } = req.params;
-      if(!id){
-        return res.status(400).json({
-          errors: ['Argumento id não foi localizado']
-        });
-      }
-
       const empresa = await Empresa.findByPk(id);
       if(!empresa){
         return res.status(400).json({
@@ -49,10 +35,14 @@ class EmpresaController{
         });
       }
 
-      return res.status(200).json({ empresa });
+      if(empresa.ativo){
+        return res.status(200).json({ empresa });
+      }
+      else{
+        return res.status(200).json({ message: "Empresa não está ativa"});
+      }
 
-    } catch (error) {
-
+    } catch (e) {
       if(!e.erros){
         return res.status(500).json({ errors: e});
       }
@@ -65,31 +55,31 @@ class EmpresaController{
   }
 
   async update(req, res){
-
     try {
+      let errors = [];
+      let empresa = {};
 
       const { id } = req.params;
-      if(!id){
-        return res.status(400).json({
-          error: ['Argumento id não foi localizado']
-        });
-      }
 
-      const empresa = await Empresa.findByPk(id);
+      empresa = await Empresa.findByPk(id);
       if(!empresa){
         return res.status(400).json({
           errors: ['Empresa não localizado']
         });
       }
 
-      if(!req.body){
-        return res.status(400).json({
-          errors: ['Objeto empresa não localizado']
+      errors = validarCampos(req);
+      empresa = removerEspacosEmBranco(req);
+
+      if(!errors){
+        return res.status(500).json({ errors: errors });
+      }
+      else{
+        await Empresa.update(empresa, {where: {id: id}}, {multi: true});
+        return res.status(200).json({
+          empresa_atualizada: true
         });
       }
-
-      const empresaAtualizada = await empresa.update(req.body);
-      return res.status(200).json(empresaAtualizada);
 
     } catch (e) {
       if(!e.errors){
@@ -104,74 +94,49 @@ class EmpresaController{
   }
 
   async delete(req, res){
-
     try {
 
-      const { id } = req.params;
-      if(!id){
-        return res.status(400).json({
-          error: ['Parametro id não foi localizado']
-        });
-      }
+      let empresa = {};
 
-      const empresa = await Empresa.findByPk(id);
+      const { id } = req.params;
+      empresa = await Empresa.findByPk(id);
       if(!empresa){
         return res.status(400).json({
           errors: ['Empresa não localizada']
         });
       }
 
-      await empresa.destroy();
+      await Empresa.update({ativo: false}, {where: {id: id}}, {multi: true});
       return res.status(200).json({
         empresa_apagada: true
       });
 
     } catch (e) {
-
       if(!e.errors){
         return res.status(500).json({errors: e});
       }
       else{
-        return res.status(400).json({errors: e.errors.map((err) => err.message)
+        return res.status(400).json({
+          errors: e.errors.map((err) => err.message )
         });
       }
     }
   }
 
   async store(req, res){
-
     try {
 
-      if(!req.body){
-        return res.status(400).json({
-          errors: ['Objeto empresa inválido']
-        });
-      }
+      let errors = [];
+      let empresa = {};
 
-      const { nome_fantasia, pessoa_de_contato, email, ativo} = req.body;
-      nome_fantasia = '';
-      pessoa_de_contato = '';
-      email = '';
-      ativo = '';
+      errors = validarCampos(req);
+      empresa = removerEspacosEmBranco(req);
 
-      if(nome_fantasia){
-        this.errors.push('Nome Fantasia está em branco');
-      }
-      if(pessoa_de_contato){
-        this.errors.push('Nome da pessoa de contato está em branco');
-      }
-      if(email){
-        this.errors.push('O email está em branco');
-      }
-      if(ativo){
-        this.errors.push('O campo ativo está em branco');
-      }
-
-      if(this.errors){
-        return res.status(500).json({errors: errors.array()})
+      if(!errors){
+        return res.status(500).json({errors: errors});
       }
       else{
-        const empresa = await Empresa.create(req.body);
+        empresa = await Empresa.create(empresa);
         return res.status(200).json({
           empresa_cadastrada: true,
           empresa
@@ -179,10 +144,7 @@ class EmpresaController{
       }
 
     } catch (e) {
-
-      console.log(e);
-
-      if(!e.errors){
+        if(!e.errors){
         return res.status(500).json({errors: e});
       }
       else{
@@ -192,10 +154,34 @@ class EmpresaController{
       }
     }
   }
-  validarEmpresa(nome_fantasia){
+}
 
+function validarCampos(req){
+  let errors = [];
+  let empresa = req.body;
+
+  if(!empresa.nome_antasia){
+    errors.push('Nome Fantasia está em branco');
+  }
+  if(!empresa.pessoa_de_contato){
+    errors.push('Nome da pessoa de contato está em branco');
+  }
+  if(!empresa.email){
+    errors.push('O email está em branco');
+  }
+  if(!empresa.ativo){
+    errors.push('O campo ativo está em branco');
   }
 
+  return errors;
+}
+
+function removerEspacosEmBranco(req){
+  let empresa = req.body;
+  for(let attr in empresa){
+    empresa[attr] = empresa[attr].trim();
+  }
+  return empresa;
 }
 
 export default new EmpresaController();
