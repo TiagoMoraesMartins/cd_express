@@ -4,7 +4,7 @@ class UsuarioController{
   async index(req, res){
     try {
       //const usuarios = await Usuario.findAll({where:{ativo:true}});
-      const usuarios = await Usuario.findAll();
+      const usuarios = await Usuario.findAll({attributes:['empresaId','nome','email','tipo_de_acesso','ativo', 'created_at','updated_at']});
       if(usuarios.length <= 0){
         return res.status(400).json({
           errors: ['Nenhum registro encontrado']
