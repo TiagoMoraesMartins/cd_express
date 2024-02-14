@@ -1,5 +1,5 @@
 import Usuario from '../models/UsuarioModel';
-
+import Log from '../models/LogModel';
 class UsuarioController{
   async index(req, res){
     try {
@@ -18,8 +18,8 @@ class UsuarioController{
           return res.status(500).json({ errors: e });
         }
         else{
-        return res.status(400).json({
-          errors: e.errors.map((err) => err.message )
+          return res.status(400).json({
+            errors: e.errors.map((err) => err.message )
         });
       }
     }
@@ -77,8 +77,24 @@ class UsuarioController{
       }
       else{
         await Usuario.update(usuario, {where: {id: id}}, {multi:true});
+
+        const usuarioId = req.userId;
+        const email = req.userEmail;
+        const log = {
+          "usuarioId": usuarioId,
+          "email": email,
+          "log": "Usuário atualizado: " + usuario.id
+        }
+
+        await Log.create(log);
         return res.status(200).json({
-          usuario_atualizado: true
+          "usuario":{
+            usuario_atualizado: true
+          },
+          "log":{
+            log_criado: true,
+            log
+          }
         });
       }
 
@@ -108,8 +124,24 @@ class UsuarioController{
       }
 
       await Usuario.update({ativo:false}, {where:{id:id}},{multi:true});
+      const usuarioId = req.userId;
+      const email = req.userEmail;
+      const log = {
+        "usuarioId": usuarioId,
+        "email": email,
+        "log": "Usuario desativado:" + usuario.id,
+      }
+
+      await Log.create(log);
+
       return res.status(200).json({
-        usuario_apagado: true
+        "usuario": {
+          usuario_apagado: true
+        },
+        "log":{
+          log_criado: true,
+          log
+        }
       });
 
     } catch (e) {
@@ -139,9 +171,26 @@ class UsuarioController{
       }
       else{
         usuario = await Usuario.create(usuario);
+
+        const usuarioId = req.userId;
+        const email = req.userEmail;
+        const log = {
+          "usuarioId": usuarioId,
+          "email": email,
+          "log": "Usuário cadastrado: " + usuario.id
+        }
+
+        await Log.create(log);
+
         return res.status(200).json({
-        usuario_cadastrado: true,
-        usuario
+          "usuario": {
+          usuario_cadastrado: true,
+          usuario
+        },
+          "log": {
+            log_criado: true,
+            log
+          }
         });
       }
 

@@ -10,6 +10,7 @@ import loginRoutes from './src/routes/loginRoutes';
 import usuarioRoutes from './src/routes/usuarioRoutes';
 import empresaRoutes from './src/routes/empresaRoutes';
 import tokenRoutes from './src/routes/tokenRoutes';
+import logRoutes from './src/routes/logRoutes';
 import path from 'path';
 import flash from 'connect-flash';
 import csrf from 'csurf';
@@ -64,7 +65,8 @@ class App {
     this.app.use('/admin', adminRoutes);
     this.app.use('/admin/usuario', usuarioRoutes);
     this.app.use('/admin/empresa', empresaRoutes);
-    this.app.use('/tokens/', tokenRoutes);
+    this.app.use('/tokens', tokenRoutes);
+    this.app.use('/log', logRoutes);
   }
 
 }

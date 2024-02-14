@@ -1,4 +1,5 @@
 import Empresa from '../models/EmpresaModel';
+import Log from '../models/LogModel';
 
 class EmpresaController{
   async index(req, res){
@@ -76,8 +77,25 @@ class EmpresaController{
       }
       else{
         await Empresa.update(empresa, {where: {id: id}}, {multi: true});
+
+        const usuarioId = req.userId;
+        const email = req.userEmail;
+        const log = {
+          "usuarioId": usuarioId,
+          "email": email,
+          "log": "Empresa atualizada: " + id
+        }
+
+        await Log.create(log);
+
         return res.status(200).json({
-          empresa_atualizada: true
+          "empresa": {
+            empresa_atualizada: true
+          },
+          "log":{
+            log_criado: true,
+            log
+          }
         });
       }
 
@@ -107,8 +125,25 @@ class EmpresaController{
       }
 
       await Empresa.update({ativo: false}, {where: {id: id}}, {multi: true});
+
+      const usuarioId = req.userId;
+      const email = req.userEmail;
+      const log = {
+        "usuarioId": usuarioId,
+        "email": email,
+        "log": "Empresa desativada: " + id
+      }
+
+      await Log.create(log);
+
       return res.status(200).json({
-        empresa_apagada: true
+        "empresa": {
+          empresa_apagada: true
+        },
+        "log":{
+          log_criado: true,
+          log
+        }
       });
 
     } catch (e) {
@@ -137,9 +172,26 @@ class EmpresaController{
       }
       else{
         empresa = await Empresa.create(empresa);
+
+        const usuarioId = req.userId;
+        const email = req.userEmail;
+        const log = {
+          "usuarioId": usuarioId,
+          "email": email,
+          "log": "Empresa cadastrada: " + empresa.id
+        }
+
+        await Log.create(log);
+
         return res.status(200).json({
+          "empresa": {
           empresa_cadastrada: true,
           empresa
+          },
+          "log": {
+            log_criado: true,
+            log
+          }
         });
       }
 
