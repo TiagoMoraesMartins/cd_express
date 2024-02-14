@@ -4,7 +4,7 @@ class LogController{
   async index(req, res){
     try {
 
-      const logs = await Log.findAll();
+      const logs = await Log.findAll({attributes:['id','usuarioId','email','log']});
       if(logs.length <= 0){
         return res.status(400).json({
           errors: ['Nenhum registro encontrado']
@@ -13,7 +13,6 @@ class LogController{
 
       return res.status(200).json(logs);
 
-    } catch (e) {
     } catch (e) {
       if(!e.errors){
         return res.status(500).json({ errors: e });
@@ -30,7 +29,7 @@ class LogController{
     try {
 
       const { id } = req.params;
-      const log = await Log.findByPk(id);
+      const log = await Log.findByPk(id,{attributes:['id','usuarioId','email','log']});
       if(!log){
         return res.status(400).json({
           errors: ['Log não localizado']
@@ -55,8 +54,9 @@ class LogController{
   async showByUser(req, res){
     try {
 
-      const { idUser } = req.params;
-      const logs = Log.findAll({where: { usuarioId : idUser}});
+      const { id } = req.params;
+      const logs = await Log.findAll({where: { usuarioId : id},attributes:['id','usuarioId','email','log']});
+
       if(logs.length <= 0){
         return res.status(400).json({
           errors: ['Nenhum registro encontrado']
