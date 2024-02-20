@@ -53,7 +53,8 @@ export default class Usuario extends Model {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
-    }, {
+    },
+    {
       sequelize,
       modelName: 'Usuario',
     });

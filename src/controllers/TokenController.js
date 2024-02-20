@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 
 class TokenController{
   async store(req, res){
-    const { email = '', password = '' } = req.body;
+    try {
+      const { email = '', password = '' } = req.body;
 
     if(!email || !password){
       return res.status(401).json({
@@ -30,11 +31,21 @@ class TokenController{
     }
 
     const { id } = usuario;
-    const token = jwt.sign({id, email}, process.env.TOKEN_SECRET,{
+    const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET,{
       expiresIn: process.env.TOKEN_EXPIRATION
     });
 
-    res.json({token});
+    return res.json({ token });
+    } catch (e) {
+      if(!e.errors){
+        return res.status(500).json({ errors: e });
+      }
+      else{
+        return res.status(400).json({
+          errors: e.errors.map((err) => err.message )
+        });
+      }
+    }
   }
 }
 

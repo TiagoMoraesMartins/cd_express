@@ -1,0 +1,22 @@
+{
+  "openapi":"3.0.0",
+  "info":{
+    "title":"API de gestão do CD Express",
+    "description":"Essa API tem como objetivo de realizar a gestão das informações que são utilizadas no CD Express",
+    "termsOfService":"http://localhost:3001/terms",
+    "contact":{
+      "email":"cdexpress@cdexpress.com.br"
+    },
+    "version":"1.0.0"
+  },
+  "servers":[
+    {
+      "url":"http://localhost:3001/v1",
+      "description":"API para efetuar os testes"
+    },
+    {
+      "url":"https://cdexpress.com.br/",
+      "description":"API de produção"
+    }
+  ]
+}

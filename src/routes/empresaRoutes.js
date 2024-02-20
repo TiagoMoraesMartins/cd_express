@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import empresaController from '../controllers/EmpresaController';
+import empresaController from '../controllers/empresaController';
 import loginRequired from '../middlewares/loginRequired';
 
 const router = new Router();
