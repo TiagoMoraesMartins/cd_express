@@ -199,6 +199,6 @@ export default class Empresa extends Model {
     return this;
   }
   static associate(models) {
-    this.hasMany(models.Usuario);
+    this.hasMany(models.Usuario,{ foreignKey: 'empresaId'});
   }
 }

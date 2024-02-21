@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "",
-    "start": "nodemon server.js --ignore public --ignore frontend",
-    "dev": "webpack -w"
+    "dev": "nodemon server.js",
+    "build":"sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",

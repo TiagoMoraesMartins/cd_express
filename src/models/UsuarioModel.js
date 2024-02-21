@@ -67,8 +67,7 @@ export default class Usuario extends Model {
     return this;
   }
   static associate(models) {
-    this.belongsTo(models.Empresa);
-    this.hasMany(models.Log);
+    this.belongsTo(models.Empresa, { foreignKey: 'empresaId'});
   }
 
   passwordIsValid(password){

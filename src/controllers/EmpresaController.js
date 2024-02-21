@@ -1,11 +1,19 @@
 import Empresa from '../models/EmpresaModel';
 import Log from '../models/LogModel';
+import Usuario from '../models/UsuarioModel';
 
 class EmpresaController{
   async index(req, res){
     try {
       //const empresas = await Empresa.findAll({where:{ativo:true}});
-      const empresas = await Empresa.findAll();
+      const empresas = await Empresa.findAll({
+        order: [['id', 'DESC'],[Usuario, 'id','DESC']],
+        include:{
+          model: Usuario,
+          attributes: ['id','nome','email','tipo_de_acesso','ativo'],
+        },
+       });
+
       if(empresas.length <= 0){
         return res.status(400).json({
           errors: ['Nenhum registro encontrado']
