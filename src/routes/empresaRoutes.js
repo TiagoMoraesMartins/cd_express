@@ -3,6 +3,7 @@ import empresaController from '../controllers/empresaController';
 import loginRequired from '../middlewares/loginRequired';
 
 const router = new Router();
+
 router.get('/', loginRequired, empresaController.index);
 router.get('/:id', loginRequired, empresaController.show);
 
